@@ -3,14 +3,15 @@ const AttendanceModel = require("../models/attendance.model");
 const SessionModel = require("../models/session.model");
 const UserModel = require("../models/user.model");
 require('dotenv').config();
-const orionUrl = process.env.orionUrl || "";
-const orionApiKey = process.env.orionApiKey || "";
+const orionApiKey = "UCmVBuJN9s9Bms07DZvrY1ZKt69DUOYd4jH7pbSG"
+const orionUrl = "https://c6qxu8f6p2.execute-api.ap-south-1.amazonaws.com/api/searchFace";
 
 
 const FormData = require("form-data");
 const axios = require("axios");
 const fs = require("fs");
 const uuid = require("uuid");
+const sessionModel = require("../models/session.model");
 
 const createEmployee = async (req,res) =>{
     try{
@@ -41,20 +42,23 @@ const createEmployee = async (req,res) =>{
         const formData = new FormData();
         formData.append("transactionId",employeeId);
         formData.append("selfie",fileInp);
-        formData.append("enroll","yes");
+        formData.append("enrol","yes");
 
         let config = {
             method:"post",
             maxBodyLength: Infinity,
             url: orionUrl,
             headers: {
-                "x-api-key": orionApiKey,
-                ...fornData.getHeaders(),
+                "x-api-key":orionApiKey,
+                ...formData.getHeaders(),
             },
             data: formData,
         };
+
+        // console.log("configs",config)
         const response = await axios.request(config);
         const result = response.data;
+        console.log("result",result)
         fs.unlinkSync(filename);
 
         if (result.statusCode !== 200) {
@@ -65,13 +69,14 @@ const createEmployee = async (req,res) =>{
             });
         }
         const User = new UserModel({
-            name,rollNo,gender
+            name:employeeName,employeeId:employeeId,gender:gender
         })
         await User.save();
 
         return res.status(200).json({
             status: "success",
             message: "User added successfully", 
+            orion:result
         });
     }catch (error) {
         console.log("Error in adding the User: ", error);
@@ -113,7 +118,7 @@ const addSession = async (req, res) => {
 
         const session = new SessionModel({
             date: sessionDate,
-            sessionNumber
+            sessionNumber:sessionNumber
         });
 
         await session.save();
@@ -123,7 +128,7 @@ const addSession = async (req, res) => {
 
         // Create attendance logs for each employee with default status 'absent'
         const attendanceLogs = employees.map(employee => new AttendanceModel({
-            employeeId: User._id,
+            employeeId: employee.id,
             date: sessionDate,
             sessionId: session._id,
             status: 'absent',
@@ -141,10 +146,10 @@ const addSession = async (req, res) => {
             message: "Session added successfully."
         });
     } catch (error) {
-        console.log("Error in addSession: ", error);
+        console.log("----- Error in addSession: ", error);
         return res.status(500).json({
             status: "error",
-            message: "Internal Server Error"
+            message:"Internal Server Error",
         });
     }
 };
@@ -174,10 +179,10 @@ const getAttendanceLogs = async (req, res) => {
             attendanceLogs
         });
     } catch (error) {
-        console.log("Error in getAttendanceLogs: ", error);
+        console.log("---------Error in getAttendanceLogs: ", error);
         return res.status(500).json({
             status: "error",
-            message: "Internal Server Error"
+            message: "Internal Server Error",
         });
     }
 };
