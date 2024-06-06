@@ -91,6 +91,7 @@ const Home= ({setstate,setim,setreason}) => {
             reader.readAsDataURL(blob);
             reader.onloadend = async () => {
               const base64data = reader.result;
+              console.log(base64data);
                  try {
               const response = await fetch(`${BASE_URL}device/markPresent`, {
                 method: 'POST',
