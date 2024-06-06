@@ -4,8 +4,9 @@ const UserModel = require("../models/user.model");
 const axios = require("axios");
 const FormData = require("form-data");
 require('dotenv').config();
-const orionApiKey = process.env.ORION_API_KEY || "";
-const orionUrl = process.env.ORION_END_POINT || "";
+const orionApiKey = "UCmVBuJN9s9Bms07DZvrY1ZKt69DUOYd4jH7pbSG"
+const orionUrl = "https://c6qxu8f6p2.execute-api.ap-south-1.amazonaws.com/api/searchFace";
+
 const uuid = require("uuid");
 const fs = require("fs");
 const { timeStamp } = require("console");
@@ -106,6 +107,7 @@ const markPresent = async (req,res) =>{
             });
         }
         let rollNo = result.result.data.matches.internal[0].transactionId;
+        console.log(rollNo);
         if(!rollNo) {
             return res.status(400).json({
                 status: "error",
@@ -127,7 +129,7 @@ const markPresent = async (req,res) =>{
                 break;
             }
         }
-        const session = await SessionModel.findOne({currentDate});
+        const session = await SessionModel.findOne({date:"2024-06-05T18:30:00.000+00:00"});
         if(!session) {
             return res.status(404).json({
                 status: "error",
@@ -172,5 +174,93 @@ const markPresent = async (req,res) =>{
     }
 
 };
+// const markPresent = async (req, res) => {
+//     const { image } = req.body;
+
+//     if (!image) {
+//         return res.status(400).json({
+//             status: "error",
+//             message: "Missing parameters!",
+//         });
+//     }
+
+//     try {
+//         const result = await searchFace(image);
+
+//         if (!result || result.statusCode !== 200 || !result.result || !result.result.data || !result.result.data.matches || !result.result.data.matches.internal.length) {
+//             return res.status(400).json({
+//                 status: "error",
+//                 message: "Face not found in database or incomplete data received",
+//             });
+//         }
+
+//         let employee, imgUrl = "";
+//         for (const match of result.result.data.matches.internal) {
+//             if (match && match.transactionId) {
+//                 employee = await UserModel.findOne({ rollNo: match.transactionId });
+//                 if (employee) {
+//                     imgUrl = match.selfie ? match.selfie.url : "";
+//                     break;
+//                 }
+//             }
+//         }
+
+//         if (!employee) {
+//             return res.status(404).json({
+//                 status: "error",
+//                 message: "Employee not found",
+//             });
+//         }
+
+//         const currentDate = new Date();
+//         currentDate.setHours(0, 0, 0, 0);
+
+//         const session = await SessionModel.findOne({ date: currentDate });
+//         if (!session) {
+//             return res.status(404).json({
+//                 status: "error",
+//                 message: "Session not found",
+//             });
+//         }
+
+//         const existingAttendance = await AttendanceModel.findOne({
+//             employeeId: employee._id,
+//             sessionId: session._id
+//         });
+
+//         if (existingAttendance && (existingAttendance.status === "present" || existingAttendance.status === "late")) {
+//             return res.status(400).json({
+//                 status: "error",
+//                 message: "Attendance already marked",
+//             });
+//         }
+
+//         let presentStatus = "late";
+//         const currentTime = new Date();
+//         if (currentTime <= session.timeTillPresent) {
+//             presentStatus = "present";
+//         }
+
+//         await AttendanceModel.updateOne(
+//             { employeeId: employee._id, sessionId: session._id },
+//             { $set: { status: presentStatus, timeStamp: currentTime } },
+//             { upsert: true }
+//         );
+
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 message:    `${employee.name} marked as ${presentStatus}`,
+//                 imgUrl: imgUrl,
+//             },
+//         });
+//     } catch (error) {
+//         console.log("-----Error in markPresent: ", error);
+//         return res.status(500).json({
+//             status: "error",
+//             message: "Internal Server Error",
+//         });
+//     }
+// };
 
 module.exports = {login,markPresent};
