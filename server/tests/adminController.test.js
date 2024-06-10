@@ -1,3 +1,4 @@
+require('dotenv').config();
 const request = require('supertest');
 const mongoose = require('mongoose');
 const app = require("../app"); 
@@ -13,7 +14,7 @@ jest.mock('../models/attendance.model');
 describe('Admin Controller', () => {
     // Before all tests, connect to a test database
     beforeAll(async () => {
-        const url = `mongodb://127.0.0.1/adminControllerTest`;
+        const url = process.env.MONGO_URL;
         await mongoose.connect(url, { useNewUrlParser: true });
     });
 

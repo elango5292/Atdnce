@@ -1,7 +1,7 @@
+require('dotenv').config();
 const express =require('express');
 const mongoose = require('mongoose');
 const app = express();
-require('dotenv').config();
 const cookieParser = require('cookie-parser');
 
 //main
@@ -44,6 +44,8 @@ app.use((err, req, res, next) => {
     next();
 });
 
+module.exports = app;
+
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {
         app.listen(process.env.PORT, () => {
@@ -53,4 +55,3 @@ mongoose.connect(process.env.MONGO_URL)
         console.log("MongoDB connection error:", error);
     });
 
-module.exports = app;
