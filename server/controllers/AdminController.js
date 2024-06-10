@@ -3,8 +3,8 @@ const AttendanceModel = require("../models/attendance.model");
 const SessionModel = require("../models/session.model");
 const UserModel = require("../models/user.model");
 require('dotenv').config();
-const orionApiKey = "UCmVBuJN9s9Bms07DZvrY1ZKt69DUOYd4jH7pbSG"
-const orionUrl = "https://c6qxu8f6p2.execute-api.ap-south-1.amazonaws.com/api/searchFace";
+const orionApiKey = process.env.ORION_API_KEY;
+const orionUrl = process.env.ORION_URL;
 
 
 const FormData = require("form-data");
