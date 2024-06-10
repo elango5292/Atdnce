@@ -14,10 +14,11 @@ app.use((req, res, next) => {
 const cors = require('cors');
 const PORT = process.env.PORT || 3000;
 
-app.use(cors({
-    origin: 'http://localhost:3000'
-}));
-
+app.use(
+    cors({
+        origin: "*",
+    })
+);
 
 app.use(express.json());
 app.use(cookieParser());

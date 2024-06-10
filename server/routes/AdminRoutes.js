@@ -4,6 +4,6 @@ const AdminController = require('../controllers/AdminController');
 
 router.post('/createEmployee',AdminController.createEmployee);
 router.post('/addSession',AdminController.addSession);
-router.get('/getAttendanceLogs',AdminController.getAttendanceLogs);
+router.post('/getAttendanceLogs',AdminController.getAttendanceLogs);
 
 module.exports = router;
