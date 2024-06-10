@@ -191,7 +191,10 @@ const markPresent = async (req, res) => {
         if (!result || result.statusCode !== 200 || !result.result || !result.result.data || !result.result.data.matches || !result.result.data.matches.internal.length) {
             return res.status(400).json({
                 status: "error",
+
                 message: "Face not found in database or incomplete data received",
+
+
             });
         }
 
@@ -206,7 +209,9 @@ const markPresent = async (req, res) => {
             }
         }
 
+
         if (!employee) {
+
             return res.status(404).json({
                 status: "error",
                 message: "Employee not found",
@@ -264,5 +269,93 @@ const markPresent = async (req, res) => {
         });
     }
 };
+// const markPresent = async (req, res) => {
+//     const { image } = req.body;
+
+//     if (!image) {
+//         return res.status(400).json({
+//             status: "error",
+//             message: "Missing parameters!",
+//         });
+//     }
+
+//     try {
+//         const result = await searchFace(image);
+
+//         if (!result || result.statusCode !== 200 || !result.result || !result.result.data || !result.result.data.matches || !result.result.data.matches.internal.length) {
+//             return res.status(400).json({
+//                 status: "error",
+//                 message: "Face not found in database or incomplete data received",
+//             });
+//         }
+
+//         let employee, imgUrl = "";
+//         for (const match of result.result.data.matches.internal) {
+//             if (match && match.transactionId) {
+//                 employee = await UserModel.findOne({ rollNo: match.transactionId });
+//                 if (employee) {
+//                     imgUrl = match.selfie ? match.selfie.url : "";
+//                     break;
+//                 }
+//             }
+//         }
+
+//         if (!employee) {
+//             return res.status(404).json({
+//                 status: "error",
+//                 message: "Employee not found",
+//             });
+//         }
+
+//         const currentDate = new Date();
+//         currentDate.setHours(0, 0, 0, 0);
+
+//         const session = await SessionModel.findOne({ date: currentDate });
+//         if (!session) {
+//             return res.status(404).json({
+//                 status: "error",
+//                 message: "Session not found",
+//             });
+//         }
+
+//         const existingAttendance = await AttendanceModel.findOne({
+//             employeeId: employee._id,
+//             sessionId: session._id
+//         });
+
+//         if (existingAttendance && (existingAttendance.status === "present" || existingAttendance.status === "late")) {
+//             return res.status(400).json({
+//                 status: "error",
+//                 message: "Attendance already marked",
+//             });
+//         }
+
+//         let presentStatus = "late";
+//         const currentTime = new Date();
+//         if (currentTime <= session.timeTillPresent) {
+//             presentStatus = "present";
+//         }
+
+//         await AttendanceModel.updateOne(
+//             { employeeId: employee._id, sessionId: session._id },
+//             { $set: { status: presentStatus, timeStamp: currentTime } },
+//             { upsert: true }
+//         );
+
+//         res.status(200).json({
+//             status: "success",
+//             data: {
+//                 message:    `${employee.name} marked as ${presentStatus}`,
+//                 imgUrl: imgUrl,
+//             },
+//         });
+//     } catch (error) {
+//         console.log("-----Error in markPresent: ", error);
+//         return res.status(500).json({
+//             status: "error",
+//             message: "Internal Server Error",
+//         });
+//     }
+// };
 
 module.exports = {login,markPresent};

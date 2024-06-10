@@ -129,9 +129,11 @@ const addSession = async (req, res) => {
 
         // Create attendance logs for each employee with default status 'absent'
         const attendanceLogs = employees.map(employee => new AttendanceModel({
+
             name:employee.name,
             gender:employee.gender,
             employeeId: employee.employeeId,
+
             date: sessionDate,
             sessionId: session._id,
             role:employee.role,

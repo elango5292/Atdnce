@@ -90,6 +90,7 @@ const Home= ({setstate,setim,setreason}) => {
             const reader = new FileReader();
             reader.readAsDataURL(blob);
             reader.onloadend = async () => {
+
               const data = reader.result;
               const parts = data.split(",");
 
@@ -97,6 +98,7 @@ const base64data = parts[1];
               console.log(base64data);
                  try {
               const response = await fetch(`http://localhost:3000/api/v1/users//markPresent`, {
+
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
