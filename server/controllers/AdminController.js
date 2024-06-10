@@ -103,6 +103,7 @@ const addSession = async (req, res) => {
         // to ensure it's valid and remove time information if not needed
         const sessionDate = new Date(date);
         sessionDate.setHours(0, 0, 0, 0);  // This normalizes the date to the beginning of the day
+        console.log("sDate",sessionDate)
 
         const existingSession = await SessionModel.findOne({
             date: sessionDate,
@@ -128,11 +129,15 @@ const addSession = async (req, res) => {
 
         // Create attendance logs for each employee with default status 'absent'
         const attendanceLogs = employees.map(employee => new AttendanceModel({
-            employeeId: employee.id,
+            name:employee.name,
+            gender:employee.gender,
+            employeeId: employee.employeeId,
             date: sessionDate,
             sessionId: session._id,
+            role:employee.role,
             status: 'absent',
-            absentReason: "other"
+            absentReason: "other",
+            
         }));
 
         // Save all attendance logs
@@ -156,7 +161,7 @@ const addSession = async (req, res) => {
 
 const getAttendanceLogs = async (req, res) => {
     try {
-        const { date, sessionNumber } = req.query;
+        const { date, sessionNumber } = req.body;
 
         if (!date || !sessionNumber) {
             return res.status(400).json({
@@ -164,13 +169,15 @@ const getAttendanceLogs = async (req, res) => {
                 message: "Missing parameters: 'date' and 'sessionNumber' are required."
             });
         }
+        console.log("sessiondate",date)
 
         const sessionDate = new Date(date);
         sessionDate.setHours(0, 0, 0, 0);  // This normalizes the date to the beginning of the day
+        console.log("sessiondate",sessionDate)
 
         const attendanceLogs = await AttendanceModel.find({
             date: sessionDate,
-            sessionNumber
+           
         });
 
         return res.status(200).json({
