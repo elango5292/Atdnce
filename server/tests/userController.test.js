@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Ensure this points to your Express app
+const app = require('../app'); 
 const UserModel = require('../models/user.model');
 const SessionModel = require('../models/session.model');
 const AttendanceModel = require('../models/attendance.model');
