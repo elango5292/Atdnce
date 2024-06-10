@@ -1,6 +1,6 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require("../app"); // Ensure you are exporting your Express app correctly
+const app = require("../app"); 
 const UserModel = require('../models/user.model');
 const SessionModel = require('../models/session.model');
 const AttendanceModel = require('../models/attendance.model');
