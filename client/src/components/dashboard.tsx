@@ -2,6 +2,8 @@ import React from "react";
 import { useState,useEffect } from "react";
 import axios from "axios";
 import Addemp from "./addemp";
+import Addsession from "./addsession";
+import { CalendarPlus2, FileClock, Focus, UserRoundPlus } from 'lucide-react';
 
 export default function Dashboard(){
     const [data,setData] = useState()
@@ -41,13 +43,14 @@ export default function Dashboard(){
     return(
        <>
        <div className="flex flex-col h-screen my-2 mx-2 from-[#111] to-[#000000]">
-        <div className="flex flex-row gap-x-2 p-2">
-<button className="" onClick={()=>setState("addemp")}>Add Employee</button>
-<button onClick={()=>setState("dash")}>Attendance Log</button>
-<button onClick={()=>setState("newSession")}>newSession</button>
-<button ><a href="/">Home</a></button>
+       
+        <div className="flex flex-row gap-x-2 p-2 justify-end mx-2">
+<button className={`flex flex-row items-center text-[#cdcdcd] text-xs ${state==="addemp"?" border-[1px] border-[#868585] shadow-md shadow-[#484848]":""}`} onClick={()=>setState("addemp")}><span className="mr-2"><UserRoundPlus/></span>Add Employee</button>
+<button  className={`flex flex-row items-center text-[#cdcdcd] text-xs ${state==="dash"?" border-[1px] border-[#868585] shadow-md shadow-[#484848]":""}`} onClick={()=>setState("dash")}><span className="mr-2"><FileClock/></span>Attendance Log</button>
+<button   className={`flex flex-row items-center text-[#cdcdcd] text-xs ${state==="newSession"?" border-[1px] border-[#868585] shadow-md shadow-[#484848]":""}`} onClick={()=>setState("newSession")}><span className="mr-2"><CalendarPlus2/></span>Add Session</button>
+<button   ><a href="/" className="flex flex-row items-center"><span className="mr-2 "><Focus/></span>Home</a></button>
         </div>
-        {state!=="dash" ? <Addemp/> :
+        {state!=="dash" ?(state==="newSession") ? <Addsession month={6} year={2024}/> : <Addemp/> :
         <div className="flex flex-col">
             <div className="p-2">
                 <input type="date" onChange={(e)=>setDate(e.target.value)}/>

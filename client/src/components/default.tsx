@@ -137,7 +137,7 @@ const base64data = parts[1];
           modelsLoaded ?
             <div >
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-                <video className={`border-4 ${multipleFaces?"border-[#e16565]":faceDetected?"border-[#76be6b] ":"border-[#e16565]"}`} ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+                <video className={`border-4 ${multipleFaces?"border-[#ff0000]":faceDetected?"border-[#8DB600] ":"border-[#ff0000]"}`} ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
             </div>

@@ -3,6 +3,7 @@ import * as faceapi from 'face-api.js'
 import React, { useState } from 'react'
 // import { BASE_URL } from '@/constants'
 import axios from 'axios'
+import { Hash, PersonStanding,StickyNote,User } from 'lucide-react'
 
 const BASE_URL = "http://localhost:5555/api/"
 
@@ -133,30 +134,35 @@ const base64data = parts[1];
 
 
   return (
-    <div className="w-screen h-auto animate-in fade-in zoom-in p-4  duration-500 bg-gradient-to-b flex flex-col justify-center ">
-        <p className="text-3xl font-bold bg-gradient-to-br from-[#d6d6d6] via-[#a8a8a8] to-[#d6d6d6] inline-block text-transparent bg-clip-text text-center">Capture Employee face</p>
-      <head>
-        <title>Face Detection</title>
-        <meta name="description" content="Face Detection" />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
-
-<div className='flex flex-row justify-center w-screen'>
-      <div className='w-full flex flex-col justify-center items-center '>
+    <div className="w-[98vw] h-auto animate-in fade-in zoom-in  py-6 my-9    duration-500  flex flex-col justify-center items-center ">
+     
+<div   className='relative  flex flex-row justify-around w-[90vw] p-9  shadow-lg  shadow-[#1b1b1b] border-[#2f2f2f]  border-[1px] rounded-xl'>
+<div className={`absolute z-20 top-0 left-0 h-full grayscale w-full bg-gradient-to-br from-[#1e1e1e]  to-[#2a2a2a] opacity-60`}></div>
+  <div className={`absolute z-10 top-0 left-0 h-full grayscale w-full bg-[url('/texture.png')] bg-blend-luminosity opacity-10 blur-sm  `}></div>
+<div className='w-auto  z-30 flex flex-col justify-center items-center  '>
+<p className="text-xl font-black bg-gradient-to-br from-[#d6d6d6] via-[#a8a8a8] to-[#d6d6d6] inline-block text-transparent bg-clip-text  my-4">Add new employee</p>
    {/* get input for name gender role and employee id */}
-   <input className='w-1/4 px-4 py-2 my-2 rounded-lg border-[1px] border-[#a5a5a5] text-[#d1d1d1] focus:outline-none focus:ring-2 focus:ring-[#dadada] focus:border-transparent' placeholder='Name' type="text" value={name} onChange={(e)=>setName(e.target.value)} />
-   <input className='w-1/4 px-4 py-2 my-2 rounded-lg border-[1px] border-[#a5a5a5] text-[#d1d1d1]  focus:outline-none focus:ring-2 focus:ring-[#dadada] focus:border-transparent' placeholder='Gender' type="text" value={gender} onChange={(e)=>setGender(e.target.value)} />
-   <input className='w-1/4 px-4 py-2 my-2 rounded-lg border-[1px] border-[#a5a5a5] text-[#d1d1d1]  focus:outline-none focus:ring-2 focus:ring-[#dadada] focus:border-transparent' placeholder='Emp ID' type="text" value={empid} onChange={(e)=>setEmpid(e.target.value)} />
-   <input className='w-1/4 px-4 py-2 my-2 rounded-lg border-[1px] border-[#a5a5a5] text-[#d1d1d1] focus:outline-none focus:ring-2 focus:ring-[#dadada] focus:border-transparent' placeholder='Role' type="text" value={role} onChange={(e)=>setRole(e.target.value)} />
+   <div className='flex flex-row items-center gap-x-1 '>
+   <span className='bg-[#1b1b1b] p-2 rounded-md border-[#4e4e4e]  border-[2px]'><User /></span>
+   <input className='w-[350px] px-4 py-3 my-2 rounded-lg border-[1px] border-[#555555] text-[#d1d1d1] bg-[#202020] shadow-inner  shadow-[#323232] focus:outline-none focus:ring-2  focus:ring-[#a2a2a2] focus:border-transparent' placeholder='Name' type="text" value={name} onChange={(e)=>setName(e.target.value)} /> </div>
+   <div className='flex flex-row items-center  gap-x-1 '>
+   <span className='bg-[#1b1b1b] p-2 rounded-md border-[#4e4e4e]  border-[2px]'><PersonStanding/></span>
+   <input className='w-[350px] px-4 py-3 my-2 rounded-lg border-[1px] border-[#555555] text-[#d1d1d1] bg-[#202020] shadow-inner  shadow-[#323232]  focus:outline-none focus:ring-2 focus:ring-[#a2a2a2] focus:border-transparent' placeholder='Gender' type="text" value={gender} onChange={(e)=>setGender(e.target.value)} /> </div>
+   <div className='flex flex-row items-center  gap-x-1 '>
+   <span className='bg-[#1b1b1b] p-2 rounded-md border-[#4e4e4e]  border-[2px]'><Hash/></span>
+   <input className='w-[350px] px-4 py-3 my-2 rounded-lg border-[1px] border-[#555555] text-[#d1d1d1] bg-[#202020] shadow-inner  shadow-[#323232]  focus:outline-none focus:ring-2 focus:ring-[#a2a2a2] focus:border-transparent' placeholder='Emp ID' type="text" value={empid} onChange={(e)=>setEmpid(e.target.value)} /> </div>
+   <div className='flex flex-row items-center  gap-x-1 '>
+   <span className='bg-[#1b1b1b] p-2 rounded-md border-[#4e4e4e]  border-[2px]'><StickyNote/></span>
+   <input className='w-[350px] px-4 py-3 my-2 rounded-lg border-[1px] border-[#555555] text-[#d1d1d1] bg-[#202020] shadow-inner  shadow-[#323232] focus:outline-none focus:ring-2 focus:ring-[#a2a2a2] focus:border-transparent' placeholder='Role' type="text" value={role} onChange={(e)=>setRole(e.target.value)} /> </div>
+</div>
 
-   </div>
-      </div>
+   <div className='flex flex-col  z-30'>
       {
         captureVideo ?
           modelsLoaded ?
             <div >
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-                <video className={`border-4 ${multipleFaces?"border-[#e16565]":faceDetected?"border-[#76be6b] ":"border-[#e16565]"}`} ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+              <div  style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
+                <video className={`border-t-4 ${multipleFaces?"border-[#ff0000]":faceDetected?"border-[#8DB600] ":"border-[#ff0000]"}`} ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
             </div>
@@ -180,7 +186,8 @@ const base64data = parts[1];
 >
   Add employee
 </button>
-  </div>
+</div>
+  </div></div>
   )
 }
 
