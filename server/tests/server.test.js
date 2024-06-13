@@ -1,6 +1,6 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require("../app"); // Ensure your server exports 'app'
+const app = require("../app"); 
 
 // Mock external dependencies
 jest.mock('mongoose');
