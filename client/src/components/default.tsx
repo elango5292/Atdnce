@@ -79,7 +79,7 @@ const Home= ({setstate,setim,setreason}) => {
           setFaceDetected(false);
         }
       }
-    }, 5000)
+    }, 1000)
   }
 
   const markAttendance = async () => {
@@ -168,7 +168,7 @@ const base64data = parts[1];
   Mark attendance
 </button>
 <div className='w-screen h-auto'>
-  <h3 className='text-sm font-light p-1 text-[#b1b1b1]'>Tips: </h3><h3 className='text-sm font-light p-1 text-[#b1b1b1]'>1. Ensure that your face is clearly visible. </h3><h3 className='text-sm font-light p-1 text-[#b1b1b1]'>2. Ensure that a single face is being detected. </h3>
+  <h3 className='text-sm font-light p-1 text-[#b1b1b1]'>Tips: </h3><h3 className='text-sm font-light p-1 text-[#b1b1b1]'>1. Ensure that your face is clearly visible. </h3><h3 className='text-sm font-light p-1 text-[#b1b1b1]'>2. Ensure that a single face is being detected. </h3> <h3 className='text-sm font-light p-1 text-[#b1b1b1]'>3. Refresh the page if you face any errors with the camera. </h3>
 <h3 className='text-sm font-light p-1 text-[#b1b1b1]'>Admins tools are available at <i className='text-[#b1b1b1] border-[1px] border-[#272727] p-1 bg-[#232323]'>/dashboard</i></h3>
 
 </div>

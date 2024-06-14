@@ -85,7 +85,7 @@ const Home= ({setstate,setim,setreason}) => {
           setFaceDetected(false);
         }
       }
-    }, 5000)
+    }, 1000)
   }
 
   const markAttendance = async () => {
