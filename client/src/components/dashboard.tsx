@@ -5,6 +5,7 @@ import Addemp from "./addemp";
 import Addsession from "./addsession";
 import { CalendarPlus2, FileClock, Focus, UserRoundPlus } from 'lucide-react';
 import { serverUrl } from '../constants';
+import { auth } from "./firebase.ts";
 export default function Dashboard(){
     const [data,setData] = useState()
     const [date,setDate] = useState(new Date())
@@ -13,11 +14,12 @@ export default function Dashboard(){
     useEffect(
         
         ()=>{
-            console.log(date)
+           
         let reqdata = JSON.stringify({
-            "date":date,
+            "date":new Date(date),
             "sessionNumber":session
           });
+          console.log(reqdata)
           
           let config = {
             method: 'post',
