@@ -27,6 +27,10 @@ const AttendanceSchema = new mongoose.Schema({
     enum: ["present", "absent","late"],
     required: true,
   },
+  sessionNumber:{
+    type: Number,
+    required: true,
+  },
   absentReason:{
     type: String,
     enum:["medical","other"],

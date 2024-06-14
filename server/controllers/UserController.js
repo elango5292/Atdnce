@@ -5,7 +5,8 @@ const axios = require("axios");
 const FormData = require("form-data");
 require('dotenv').config();
 const orionApiKey = process.env.ORION_API_KEY;
-const orionUrl = process.env.ORION_URL;
+const orionUrl = process.env.ORION_END_POINT;
+
 
 const uuid = require("uuid");
 const fs = require("fs");
@@ -87,10 +88,7 @@ const markPresent = async (req, res) => {
         if (!result || result.statusCode !== 200 || !result.result || !result.result.data || !result.result.data.matches || !result.result.data.matches.internal.length) {
             return res.status(400).json({
                 status: "error",
-
                 message: "Face not found in database or incomplete data received",
-
-
             });
         }
 
@@ -105,9 +103,7 @@ const markPresent = async (req, res) => {
             }
         }
 
-
         if (!employee) {
-
             return res.status(404).json({
                 status: "error",
                 message: "Employee not found",
@@ -126,10 +122,8 @@ const markPresent = async (req, res) => {
             });
         }
 
-        const existingAttendance = await AttendanceModel.findOne({
-            employeeId: employee.employeeId,
-            sessionId: session._id
-        });
+        const existingAttendance = await AttendanceModel.findOne({ employeeId: employee.employeeId, sessionId: session._id, sessionNumber: new Date().getHours() < 9 ? 1 : new Date().getHours() < 18 ? 2 : 3 });
+
 
         if (existingAttendance && (existingAttendance.status === "present" || existingAttendance.status === "late")) {
             return res.status(400).json({
@@ -138,15 +132,12 @@ const markPresent = async (req, res) => {
             });
         }
 
-        let presentStatus = "late";
+        let presentStatus = "present";
         const currentTime = new Date();
-        if (currentTime <= session.timeTillPresent) {
-            presentStatus = "present";
-        }
 
         await AttendanceModel.updateOne(
-            { employeeId: employee.employeeId, sessionId: session._id },
-            { $set: { status: presentStatus, timeStamp: currentTime } },
+            { employeeId: employee.employeeId, sessionId: session._id,sessionNumber:session.sessionNumber },
+            { $set: { status:presentStatus, timeStamp: currentTime } },
             // { upsert: true }
         );
 

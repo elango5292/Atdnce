@@ -1,10 +1,13 @@
 "use client"
 import * as faceapi from 'face-api.js'
 import React, { useState } from 'react'
-// import { BASE_URL } from '@/constants'
 import axios from 'axios'
+import { toast ,ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { serverUrl } from '../constants';
+ 
 
-const BASE_URL = "http://localhost:5555/api/"
+
 
 const Home= ({setstate,setim,setreason}) => {
   const [modelsLoaded, setModelsLoaded] = useState(false);
@@ -80,6 +83,7 @@ const Home= ({setstate,setim,setreason}) => {
   }
 
   const markAttendance = async () => {
+    toast.info("Processing ...")
     if (videoRef.current && videoRef.current.readyState === 4 && multipleFaces === false) {
       const canvas = canvasRef.current;
       const context = canvas?.getContext('2d');
@@ -97,25 +101,31 @@ const Home= ({setstate,setim,setreason}) => {
 const base64data = parts[1];
               console.log(base64data);
                  try {
-              const response = await fetch(`http://localhost:3000/api/v1/users//markPresent`, {
+              const response = await fetch(`${serverUrl}/api/v1/users//markPresent`, {
 
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ image: base64data})                // JSON.stringify({ image: base64data, transactionId: '12345' })
+                body: JSON.stringify({ image: base64data})               
               });
               const data = await response.json();
+              
               if (data.status=== "success") {
                 setreason(data.data.message);
+               
                 setim(data.data.imgUrl);
                 setstate(1);
                 
+              }
+              else if (data.status=== "error") {
+                toast(data.message);
               }
               console.log(data);
             //   console.log(base64data);
             } catch (error) {
               console.error('Error posting image:', error);
+              
             }
             //   console.log(base64data);
             }
@@ -139,7 +149,7 @@ const base64data = parts[1];
           modelsLoaded ?
             <div >
               <div style={{ display: 'flex', justifyContent: 'center', padding: '10px' }}>
-                <video className={`border-4 ${multipleFaces?"border-[#e16565]":faceDetected?"border-[#76be6b] ":"border-[#e16565]"}`} ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
+                <video className={`border-t-4 ${multipleFaces?"border-[#ff0000]":faceDetected?"border-[#8DB600] ":"border-[#ff0000]"}`} ref={videoRef} height={videoHeight} width={videoWidth} onPlay={handleVideoOnPlay} style={{ borderRadius: '10px' }} />
                 <canvas ref={canvasRef} style={{ position: 'absolute' }} />
               </div>
             </div>
@@ -157,6 +167,12 @@ const base64data = parts[1];
 >
   Mark attendance
 </button>
+<div className='w-screen h-auto'>
+  <h3 className='text-sm font-light p-1 text-[#b1b1b1]'>Tips: </h3><h3 className='text-sm font-light p-1 text-[#b1b1b1]'>1. Ensure that your face is clearly visible. </h3><h3 className='text-sm font-light p-1 text-[#b1b1b1]'>2. Ensure that a single face is being detected. </h3>
+<h3 className='text-sm font-light p-1 text-[#b1b1b1]'>Admins tools are available at <i className='text-[#b1b1b1] border-[1px] border-[#272727] p-1 bg-[#232323]'>/dashboard</i></h3>
+
+</div>
+<ToastContainer/>
   </div>
   )
 }
