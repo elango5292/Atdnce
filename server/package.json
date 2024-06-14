@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "serve":"node app.js"
   },
   "jest": {
     "testEnvironment": "node"
