@@ -18,16 +18,11 @@ describe('Admin Controller', () => {
         await mongoose.connect(url, { useNewUrlParser: true });
     });
 
-    // Clear all test data after every test
+
     afterEach(async () => {
-        jest.resetAllMocks(); // Reset mocks to avoid leakage between tests
-        await mongoose.connection.db.dropDatabase();
+        await mongoose.connection.close();
     });
 
-    // After all tests are done, disconnect from the database
-    afterAll(async () => {
-        await mongoose.disconnect();
-    });
 
     describe('POST /api/v1/admin/employee', () => {
         it('should create an employee successfully', async () => {
