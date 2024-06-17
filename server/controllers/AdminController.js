@@ -166,7 +166,7 @@ const getAttendanceLogs = async (req, res) => {
     try {
         const { date, sessionNumber } = req.body;
 
-        if (!date || !sessionNumber) {
+        if (!date && !sessionNumber) {
             return res.status(400).json({
                 status: "error",
                 message: "Missing parameters: 'date' and 'sessionNumber' are required."
@@ -201,6 +201,13 @@ const getAttendanceLogs = async (req, res) => {
 const getSessions = async (req, res) => {
     try {
         const { month, year } = req.body;
+        
+            if (!month && !year) {
+                return res.status(400).json({
+                    status: "error",
+                    message: "Missing parameters: 'month' and 'year' are required."
+                });
+            }
         const startDate = new Date(year, month - 1);
         const endDate = new Date(year, month); 
 
@@ -337,4 +344,4 @@ const createSessions = async (req, res) => {
 };
 
 
-module.exports = {createEmployee,addSession,getAttendanceLogs,getSessions,createSessions};
+module.exports = {createEmployee,addSession,getAttendanceLogs,getSessions,createSessions,deleteSession,addSessionWorker};

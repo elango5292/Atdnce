@@ -157,4 +157,4 @@ const markPresent = async (req, res) => {
     }
 };
 
-module.exports = {login,markPresent};
+module.exports = {login,markPresent,searchFace};
