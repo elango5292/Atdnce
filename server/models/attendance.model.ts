@@ -1,4 +1,6 @@
-const mongoose = require("mongoose")
+
+import mongoose from "mongoose";
+
 const AttendanceSchema = new mongoose.Schema({
   name:{
     type: String,
@@ -38,4 +40,5 @@ const AttendanceSchema = new mongoose.Schema({
   },
 });
 const AttendanceModel = mongoose.model("Attendance", AttendanceSchema);
-module.exports = AttendanceModel;
+
+module.exports = AttendanceModel

@@ -1,10 +1,12 @@
 require('dotenv').config();
-const express =require('express');
+
+import express from "express";
 const mongoose = require('mongoose');
 const app = express();
 const cookieParser = require('cookie-parser');
+import { Response,Request } from "express";
 
-//main
+
 
 app.use((req, res, next) => {
     console.log("path", req.path, " method", req.method);
@@ -24,8 +26,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-const UserRoutes = require('./routes/UserRoutes');
-const AdminRoutes = require('./routes/AdminRoutes');
+const UserRoutes = require('./routes/UserRoutes.js');
+const AdminRoutes = require('./routes/AdminRoutes.js');
 
 
 app.use("/api/v1/users",UserRoutes);
@@ -33,7 +35,7 @@ app.use("/api/v1/admin",AdminRoutes);
 
 app.use(express.json({ limit: "10mb" }));
 
-app.use((err, req, res, next) => {
+app.use((err: any, req:Request, res:Response, next:any) => {
     if (err) {
         console.log(err.stack);
         return res
@@ -51,7 +53,7 @@ mongoose.connect(process.env.MONGO_URL)
         app.listen(process.env.PORT, () => {
             console.log(`MongoDB connected successfully and server listening on port ${process.env.PORT}`);
         });
-    }).catch((error) => {
+    }).catch((error: any) => {
         console.log("MongoDB connection error:", error);
     });
 

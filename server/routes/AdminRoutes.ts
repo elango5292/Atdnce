@@ -1,6 +1,7 @@
-const express = require('express');
+
+import express from 'express';
 const router = express.Router();
-const AdminController = require('../controllers/AdminController');
+const AdminController = require('../controllers/AdminController.js');
 
 router.post('/createEmployee',AdminController.createEmployee);
 router.post('/addSession',AdminController.addSession);

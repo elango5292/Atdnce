@@ -13,7 +13,12 @@ const fs = require("fs");
 const uuid = require("uuid");
 const sessionModel = require("../models/session.model");
 console.log(orionUrl,orionApiKey)
-const createEmployee = async (req,res) =>{
+
+import { addSessionReq, createEmployeeReq, createSessionReq, getAttendanceLogsReq, getSessionsReq } from "../types/adminReq";
+import { Employee} from "../types/dataSchema";
+import { Response } from "express";
+
+const createEmployee = async (req:createEmployeeReq,res:Response) =>{
 
     try{
         const {employeeName,employeeId,gender,image,role} = req.body;
@@ -36,6 +41,13 @@ const createEmployee = async (req,res) =>{
 
         //Enroll image to Orion
         const newImg = image.split(":base64").pop();
+        if(!newImg) {
+            console.log("no image")
+            return res.status(400).json({
+                status: "error",
+                message: "Image not found",
+            });
+        }
         const buffer = Buffer.from(newImg,"base64");
         fs.writeFileSync(filename,buffer);
 
@@ -90,7 +102,8 @@ const createEmployee = async (req,res) =>{
 
 };
 
-const addSession = async (req, res) => {
+
+const addSession = async (req:addSessionReq, res:Response) => {
     try {
         const { date, sessionNumber } = req.body;
 
@@ -129,7 +142,7 @@ const addSession = async (req, res) => {
         console.log(employees);
 
         // Create attendance logs for each employee with default status 'absent'
-        const attendanceLogs = employees.map(employee => new AttendanceModel({
+        const attendanceLogs = employees.map((employee:Employee) => new AttendanceModel({
 
             name:employee.name,
             gender:employee.gender,
@@ -162,7 +175,8 @@ const addSession = async (req, res) => {
     }
 };
 
-const getAttendanceLogs = async (req, res) => {
+
+const getAttendanceLogs = async (req:getAttendanceLogsReq, res:Response) => {
     try {
         const { date, sessionNumber } = req.body;
 
@@ -198,7 +212,8 @@ const getAttendanceLogs = async (req, res) => {
     }
 };
 
-const getSessions = async (req, res) => {
+
+const getSessions = async (req:getSessionsReq, res:Response) => {
     try {
         const { month, year } = req.body;
         
@@ -232,7 +247,7 @@ const getSessions = async (req, res) => {
 };
 
 
-const addSessionWorker = async (date, sessionNumber) => {
+const addSessionWorker = async (date:Date, sessionNumber:number) => {
     try {
         const sessionDate = new Date(date);
         sessionDate.setHours(0, 0, 0, 0);  // This normalizes the date to the beginning of the day
@@ -256,7 +271,7 @@ const addSessionWorker = async (date, sessionNumber) => {
         const employees = await UserModel.find();
 
         // Create attendance logs for each employee with default status 'absent'
-        const attendanceLogs = employees.map(employee => new AttendanceModel({
+        const attendanceLogs = employees.map((employee:Employee) => new AttendanceModel({
             name:employee.name,
             gender:employee.gender,
             employeeId: employee.employeeId,
@@ -283,7 +298,9 @@ const addSessionWorker = async (date, sessionNumber) => {
     }
 };
 
-const deleteSession = async (date, sessionNumber) => {
+
+
+const deleteSession = async (date:Date, sessionNumber:number) => {
     try {
         const sessionDate = new Date(date);
         sessionDate.setHours(0, 0, 0, 0);  // This normalizes the date to the beginning of the day
@@ -308,7 +325,8 @@ const deleteSession = async (date, sessionNumber) => {
     }
 };
 
-const createSessions = async (req, res) => {
+
+const createSessions = async (req:createSessionReq, res: Response) => {
     try {
         const { from, to, sessionNumber, action } = req.body;
 

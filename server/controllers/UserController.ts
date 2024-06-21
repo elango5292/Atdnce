@@ -1,3 +1,7 @@
+import { Session } from "../types/dataSchema";
+
+
+
 const AttendanceModel = require("../models/attendance.model");
 const SessionModel = require("../models/session.model");
 const UserModel = require("../models/user.model");
@@ -11,37 +15,14 @@ const orionUrl = process.env.ORION_END_POINT;
 const uuid = require("uuid");
 const fs = require("fs");
 const { timeStamp } = require("console");
+import { Response } from "express";
 
-
-const login = async (req,res) =>{
-    const {email,password} = req.body;
-
-    if(!email || !password) {
-        return res.status(400).json({
-            status :"error",
-            message: "Missing parameters",
-        });
-    }
-    const user = await UserModel.findOne({email});
-
-    if(!user){
-        return res.status(400).json({
-            status :"error",
-            message: "User not found",
-        });
-    }
-
-    if (user.password !== password) {
-        return res.status(400).json({
-            status: "error",
-            message: "Invalid password",
-        });
-    }
-    return res.status(200).json({status:"success"});
-};
-
-const searchFace = async (image) => {
+const searchFace = async (image:string) => {
     const newImg = image.split(";base64,").pop();
+    if(!newImg) {
+        console.log("no image")
+        throw new Error("Image not found");
+    }
     const buffer = Buffer.from(newImg, "base64");
 
     const transactionId = uuid.v4();
@@ -72,7 +53,12 @@ const searchFace = async (image) => {
 };
 
 
-const markPresent = async (req, res) => {
+type markPresentReq = {
+    body: {
+        image: string
+    }
+}
+export const markPresent = async (req:markPresentReq, res:Response) => {
     const { image } = req.body;
 
     if (!image) {
@@ -83,6 +69,7 @@ const markPresent = async (req, res) => {
     }
 
     try {
+        
         const result = await searchFace(image);
 
         if (!result || result.statusCode !== 200 || !result.result || !result.result.data || !result.result.data.matches || !result.result.data.matches.internal.length) {
@@ -114,7 +101,7 @@ const markPresent = async (req, res) => {
         currentDate.setHours(0, 0, 0, 0);
         console.log("current date",currentDate)
 
-        const session = await SessionModel.findOne({ date: currentDate });
+        const session:Session | null = await SessionModel.findOne({ date: currentDate });
         if (!session) {
             return res.status(404).json({
                 status: "error",
@@ -157,4 +144,3 @@ const markPresent = async (req, res) => {
     }
 };
 
-module.exports = {login,markPresent,searchFace};
